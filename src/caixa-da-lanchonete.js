@@ -36,6 +36,10 @@ class CaixaDaLanchonete {
         const item = itens[i].match(regex)[1];
         const quantidade = parseInt(itens[i].match(regex)[2]);
 
+        if (!this.cardapio[item]) {
+          return "Item inválido!";
+        }
+
         if (this.cardapio[item] && quantidade > 0) {
           price = price + parseFloat(this.cardapio[item] * quantidade);
 
@@ -50,17 +54,13 @@ class CaixaDaLanchonete {
               if (!cafeCheck) {
                 return "Item extra não pode ser pedido sem o principal";
               }
-              break;
             case "queijo":
               if (!sanduicheCheck) {
                 return "Item extra não pode ser pedido sem o principal";
               }
-              break;
           }
         }
-        if (!this.cardapio[item]) {
-          return "Item inválido!";
-        }
+
         if (quantidade <= 0) {
           return "Quantidade inválida!";
         }
