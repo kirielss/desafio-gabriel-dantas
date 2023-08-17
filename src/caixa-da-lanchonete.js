@@ -11,8 +11,6 @@ class CaixaDaLanchonete {
   };
 
   calcularValorDaCompra(metodoDePagamento, itens) {
-    // esse regex captura tudo antes da virgula e um inteiro depois da virgula
-    const regex = /^(.*?),(\d+)/;
     let price = 0;
     let cafeCheck = false;
     let sanduicheCheck = false;
@@ -30,15 +28,19 @@ class CaixaDaLanchonete {
       return "Forma de pagamento inválida!";
     }
 
-    // esse for percorre o array de itens e verifica se o item existe no cardapio e se a quantidade é maior que 0
     for (let i = 0; i < itens.length; i++) {
-      if (itens[i].match(regex)) {
-        const item = itens[i].match(regex)[1];
-        const quantidade = parseInt(itens[i].match(regex)[2]);
+        const elements = itens[i].split(",");
+        const item = elements[0];
+        const quantidade = parseInt(elements[1]);
 
         if (!this.cardapio[item]) {
           return "Item inválido!";
         }
+
+        if (quantidade <= 0 || typeof(quantidade) !== "number" || isNaN(quantidade)) {
+          return "Quantidade inválida!";
+        }
+
 
         if (this.cardapio[item] && quantidade > 0) {
           price = price + parseFloat(this.cardapio[item] * quantidade);
@@ -61,12 +63,6 @@ class CaixaDaLanchonete {
           }
         }
 
-        if (quantidade <= 0) {
-          return "Quantidade inválida!";
-        }
-      } else {
-        return "Item inválido!";
-      }
     }
 
     switch (metodoDePagamento) {
